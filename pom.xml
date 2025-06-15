@@ -15,14 +15,13 @@
     </properties>
 
     <dependencies>
-        <!-- Tablesaw core library -->
+             
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-core</artifactId>
             <version>0.44.1</version>
         </dependency>
 
-        <!-- Optional CSV parser (recommended by Tablesaw) -->
         <dependency>
             <groupId>com.univocity</groupId>
             <artifactId>univocity-parsers</artifactId>
@@ -32,7 +31,7 @@
 
     <build>
         <plugins>
-            <!-- Run Java class with main() using Maven -->
+            
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
