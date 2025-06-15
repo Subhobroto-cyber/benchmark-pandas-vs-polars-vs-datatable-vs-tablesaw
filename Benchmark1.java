@@ -28,7 +28,6 @@ public class Benchmark1{
 
         for (int i = 0; i < RUNS; i++) {
 
-            /* ─────── READ CSV & TRIM TO MAX_ROWS ─────── */
             final Table table = measure("read", timingsNs, memDeltasMB, () -> {
                 Table full = Table.read().csv(CSV_PATH);
                 return full.rowCount() > MAX_ROWS
@@ -36,7 +35,6 @@ public class Benchmark1{
                         : full;
             });
 
-            /* ─────── WRITE CSV ─────── */
             measure("write", timingsNs, memDeltasMB, () -> {
                 try {
                     Path tmp = Files.createTempFile("tmp_", ".csv");
@@ -49,15 +47,12 @@ public class Benchmark1{
                 return null;
             });
 
-            /* ─────── GROUP BY Outcome, MEAN(Glucose) ─────── */
             measure("group", timingsNs, memDeltasMB,
                     () -> table.summarize("Glucose", mean).by("Outcome"));
 
-            /* ─────── SORT BY Age DESC ─────── */
             measure("sort", timingsNs, memDeltasMB,
                     () -> table.sortDescendingOn("Age"));
 
-            /* ─────── CONVERT TO 2D ARRAY ─────── */
             measure("to_np", timingsNs, memDeltasMB, () -> {
                 int rows = table.rowCount();
                 int cols = table.columnCount();
@@ -82,10 +77,9 @@ public class Benchmark1{
                 return arr;
             });
 
-            System.gc(); // Hint for GC before next iteration
+            System.gc(); 
         }
 
-        /* ─────── SUMMARY ─────── */
         System.out.println("\n🏁  TABLESAW  median over " + RUNS + " runs");
         System.out.printf("%-8s %10s %10s%n", "stage", "sec", "ΔMB");
 
@@ -97,7 +91,6 @@ public class Benchmark1{
         });
     }
 
-    /* ─────── Utility Methods ─────── */
 
     private static <T> T measure(String label,
                                  Map<String, List<Long>> timesNs,
@@ -105,7 +98,7 @@ public class Benchmark1{
                                  Supplier<T> block) {
 
         Runtime rt = Runtime.getRuntime();
-        rt.gc(); // Best-effort clean slate
+        rt.gc(); 
         long memBefore = usedMB(rt);
 
         long t0 = System.nanoTime();
@@ -121,7 +114,7 @@ public class Benchmark1{
     }
 
     private static long usedMB(Runtime rt) {
-        return (rt.totalMemory() - rt.freeMemory()) >> 20; // Bytes to MB
+        return (rt.totalMemory() - rt.freeMemory()) >> 20; 
     }
 
     private static double median(List<Long> vals) {
